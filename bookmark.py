@@ -188,7 +188,7 @@ while bookmark_list:
         add_to_dir("3-WIKI", bookmark, output_bookmark)
     elif 'books' in str(bookmark["url"]):
         add_to_dir("3-BOOK", bookmark, output_bookmark)
-    elif 'anime1' in str(bookmark["title"]):
+    elif 'anime1' in str(bookmark["url"]):
         add_to_dir("3-anime1", bookmark, output_bookmark)
 
     elif 'youtube' in str(bookmark["url"]):
