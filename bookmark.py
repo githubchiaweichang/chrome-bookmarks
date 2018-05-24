@@ -188,9 +188,8 @@ while bookmark_list:
         add_to_dir("3-WIKI", bookmark, output_bookmark)
     elif 'books' in str(bookmark["url"]):
         add_to_dir("3-BOOK", bookmark, output_bookmark)
-    elif 'anime1' in str(bookmark["title"]):
+    elif 'anime1' in str(bookmark["url"]):
         add_to_dir("3-anime1", bookmark, output_bookmark)
-
     elif 'youtube' in str(bookmark["url"]):
         add_to_dir("3-YOUTUBE", bookmark, output_bookmark)
     elif 'www.google.com.tw/search?' in str(bookmark["url"]):
@@ -200,6 +199,18 @@ while bookmark_list:
     elif 'redmine' in str(bookmark["url"]):
         add_to_dir("3-REDMINE", bookmark, output_bookmark)
     elif 'news' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'buzzorange' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'ruten' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'answers.yahoo' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'pchome' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'inside' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'ptt.cc' in str(bookmark["url"]):
         add_to_dir("4-NEWS", bookmark, output_bookmark)
     elif 'theinitium' in str(bookmark["url"]):
         add_to_dir("4-NEWS", bookmark, output_bookmark)
@@ -249,13 +260,6 @@ def dict_to_xml(data_dict):
     else:
         raise AssertionError("Should be List or Dict", data_dict)
     return xml
-##
-#       <DL>
-#          <DT><H3>xsss</H3>
-#          <DL>
-#          <DT><A HREF="https://www.managertoday.com.tw">經理人</A>
-#       </DL>
-##
 
 
 def add_number(bookmarks):
