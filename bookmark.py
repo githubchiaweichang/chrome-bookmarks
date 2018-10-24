@@ -155,6 +155,7 @@ def add_to_dir(dir_name, bookmark, bookmark_list):
                     })
 
 
+
 # print(bookmark_list)
 
 get_list_number(bookmark_list)
@@ -190,6 +191,8 @@ while bookmark_list:
         add_to_dir("3-BOOK", bookmark, output_bookmark)
     elif 'anime1' in str(bookmark["url"]):
         add_to_dir("3-anime1", bookmark, output_bookmark)
+    elif 'myself-bbs.com' in str(bookmark["url"]):
+        add_to_dir("3-anime1", bookmark, output_bookmark)
     elif 'youtube' in str(bookmark["url"]):
         add_to_dir("3-YOUTUBE", bookmark, output_bookmark)
     elif 'www.google.com.tw/search?' in str(bookmark["url"]):
@@ -219,6 +222,8 @@ while bookmark_list:
     elif 'managertoday' in str(bookmark["url"]):
         add_to_dir("4-NEWS", bookmark, output_bookmark)
     elif 'mobile01' in str(bookmark["url"]):
+        add_to_dir("4-NEWS", bookmark, output_bookmark)
+    elif 'udn.com' in str(bookmark["url"]):
         add_to_dir("4-NEWS", bookmark, output_bookmark)
     elif 'hk01' in str(bookmark["url"]):
         add_to_dir("4-NEWS", bookmark, output_bookmark)
