@@ -2,7 +2,63 @@ from bs4 import BeautifulSoup
 
 
 def print_list_number(my_list):
-    print("The list have" + str(len(my_list)) + " bookmarks.")
+    print("The list have " + str(len(my_list)) + " bookmarks.")
+
+
+def add_to_dir(dir_name, bookmark, bookmark_list):
+    for bookmark_dir in bookmark_list:
+        if bool(bookmark_dir):
+            if bookmark_dir["type"] == "dir":
+                if bool(bookmark_dir["content"]):
+                    add_to_dir(dir_name, bookmark, bookmark_dir["content"])
+                if bookmark_dir["title"] == dir_name:
+                    bookmark_dir["content"].append({
+                        "type": "url",
+                        "title": bookmark["title"],
+                        "content": bookmark["url"]
+                    })
+
+
+def dict_to_xml(data_dict):
+    xml = ""
+    if isinstance(data_dict, list):
+        xml += str('\n<DL>')
+        for data in data_dict:
+            # raise AssertionError(data)
+            xml += str(dict_to_xml(data))
+        xml += str('\n</DL>')
+    elif isinstance(data_dict, dict):
+        xml += str('\n<DT>')
+        if bool(data_dict):
+            # raise AssertionError("have None Dict")
+            if data_dict['type'] == 'dir':
+                xml += str('<H3>')
+                xml += str(data_dict['title'])
+                xml += str('</H3>')
+                xml += str(dict_to_xml(data_dict['content']))
+            elif data_dict['type'] == 'url':
+                xml += str('<A HREF="')
+                xml += str(data_dict['content'])
+                xml += str('">')
+                xml += str(data_dict['title'])
+                xml += str('</A>')
+            else:
+                raise AssertionError("should be url or dir")
+
+        # xml += str('</DT>')
+    else:
+        raise AssertionError("Should be List or Dict", data_dict)
+    return xml
+
+
+def add_number(bookmarks):
+    for item in bookmarks:
+        if "title" not in item.keys() or item["type"] == 'url':
+            break
+        title = item["title"]
+        item["title"] = title + "(" + str(len(item["content"])) + ")"
+        if item["type"] == 'dir':
+            add_number(item["content"])
 
 
 file_path = 'EXPORT.html'
@@ -11,13 +67,11 @@ with open(file_path, encoding='utf8') as f:
     html_doc = f.read()
 f.closed
 
-# print(html_doc)
 
 soup = BeautifulSoup(html_doc, 'html5lib')
 data = str(soup.find("dl"))
 
 data = data.replace("<p>", "").replace("</p>", "")
-# print(data)
 
 import xml.etree.ElementTree as ET
 root = ET.fromstring(data)
@@ -136,25 +190,6 @@ output_bookmark = [
 ]
 
 
-def add_to_dir(dir_name, bookmark, bookmark_list):
-    for bookmark_dir in bookmark_list:
-        # print(bookmark_dir)
-        if bool(bookmark_dir):
-            if bookmark_dir["type"] == "dir":
-                # print(bookmark_dir["content"])
-                if bool(bookmark_dir["content"]):
-                    add_to_dir(dir_name, bookmark, bookmark_dir["content"])
-                if bookmark_dir["title"] == dir_name:
-                    bookmark_dir["content"].append({
-                        "type": "url",
-                        "title": bookmark["title"],
-                        "content": bookmark["url"]
-                    })
-
-
-# print(bookmark_list)
-
-
 print_list_number(bookmark_list)
 while bookmark_list:
     bookmark = bookmark_list.pop()
@@ -229,49 +264,6 @@ while bookmark_list:
 print_list_number(bookmark_list)
 
 
-def dict_to_xml(data_dict):
-    xml = ""
-    if isinstance(data_dict, list):
-        xml += str('\n<DL>')
-        for data in data_dict:
-            # raise AssertionError(data)
-            xml += str(dict_to_xml(data))
-        xml += str('\n</DL>')
-    elif isinstance(data_dict, dict):
-        xml += str('\n<DT>')
-        # print(data_dict)
-        if bool(data_dict):
-            # raise AssertionError("have None Dict")
-            if data_dict['type'] == 'dir':
-                xml += str('<H3>')
-                xml += str(data_dict['title'])
-                xml += str('</H3>')
-                xml += str(dict_to_xml(data_dict['content']))
-            elif data_dict['type'] == 'url':
-                xml += str('<A HREF="')
-                xml += str(data_dict['content'])
-                xml += str('">')
-                xml += str(data_dict['title'])
-                xml += str('</A>')
-            else:
-                raise AssertionError("should be url or dir")
-
-        # xml += str('</DT>')
-    else:
-        raise AssertionError("Should be List or Dict", data_dict)
-    return xml
-
-
-def add_number(bookmarks):
-    for item in bookmarks:
-        if "title" not in item.keys() or item["type"] == 'url':
-            break
-        title = item["title"]
-        item["title"] = title + "(" + str(len(item["content"])) + ")"
-        if item["type"] == 'dir':
-            add_number(item["content"])
-
-
 add_number(output_bookmark)
 
 
@@ -287,7 +279,6 @@ out = '<!DOCTYPE NETSCAPE-Bookmark-file-1> \n \
 out += '<DL><DT><H3 PERSONAL_TOOLBAR_FOLDER="true">bookmark</H3>'
 out += dict_to_xml(output_bookmark)
 out += '</DL>'
-# print(out)
 
 with open('OUT.html', 'w', encoding='utf8') as file:
     file.write(out)
