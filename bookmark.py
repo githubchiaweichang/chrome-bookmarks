@@ -1,9 +1,8 @@
 from bs4 import BeautifulSoup
 
 
-def get_list_number(my_list):
-    total_number = len(my_list)
-    print("we have " + str(total_number) + " bookmarks.")
+def print_list_number(my_list):
+    print("The list have" + str(len(my_list)) + " bookmarks.")
 
 
 file_path = 'EXPORT.html'
@@ -30,7 +29,7 @@ for neighbor in root.iter('a'):
     url_dict = {'url': neighbor.attrib['href']}
     url_dict['title'] = neighbor.text
     bookmark_list.append(url_dict)
-get_list_number(bookmark_list)
+print_list_number(bookmark_list)
 
 
 output_bookmark = [
@@ -156,7 +155,7 @@ def add_to_dir(dir_name, bookmark, bookmark_list):
 # print(bookmark_list)
 
 
-get_list_number(bookmark_list)
+print_list_number(bookmark_list)
 while bookmark_list:
     bookmark = bookmark_list.pop()
     if 'hackmd' in str(bookmark["url"]):
@@ -227,7 +226,7 @@ while bookmark_list:
         pass
     else:
         add_to_dir("5-GRABEGE", bookmark, output_bookmark)
-get_list_number(bookmark_list)
+print_list_number(bookmark_list)
 
 
 def dict_to_xml(data_dict):
