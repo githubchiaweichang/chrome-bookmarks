@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import sys
 
 
 def print_list_number(my_list):
@@ -61,9 +62,17 @@ def add_number(bookmarks):
             add_number(item["content"])
 
 
-file_path = 'EXPORT.html'
+if len(sys.argv) == 3:
+    input_filename = sys.argv[1]
+    output_filename = sys.argv[2]
+elif len(sys.argv) == 1:
+    input_filename = 'Export.html'
+    output_filename = 'Import.html'
+else:
+    raise AssertionError("Input parameters error, should be 'python bookmark.py Export.html Import.html' ")
 
-with open(file_path, encoding='utf8') as f:
+
+with open(input_filename, encoding='utf8') as f:
     html_doc = f.read()
 f.closed
 
@@ -280,6 +289,6 @@ out += '<DL><DT><H3 PERSONAL_TOOLBAR_FOLDER="true">bookmark</H3>'
 out += dict_to_xml(output_bookmark)
 out += '</DL>'
 
-with open('OUT.html', 'w', encoding='utf8') as file:
+with open(output_filename, 'w', encoding='utf8') as file:
     file.write(out)
 f.closed
