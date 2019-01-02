@@ -1,6 +1,4 @@
 from bs4 import BeautifulSoup
-from pprint import pprint
-import dicttoxml
 
 
 def get_list_number(my_list):
@@ -155,10 +153,8 @@ def add_to_dir(dir_name, bookmark, bookmark_list):
                     })
 
 
-
 # print(bookmark_list)
 
-get_list_number(bookmark_list)
 
 get_list_number(bookmark_list)
 while bookmark_list:
