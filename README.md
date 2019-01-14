@@ -1,5 +1,14 @@
 # chrome-bookmarks
 
+# Spec.
+* Not yet
+    - 追加config，讓使用者可以在config設定書籤規則
+    - 設定一定刪除的url
+
+* Finish
+
+
+
 # 書籤管理工具
 * 需求
     1. 可以大量紀錄TAB
