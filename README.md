@@ -7,6 +7,8 @@
         - 設定一定刪除的url
         - 重複連結
         - 空白資料夾
+    * 新增測試項目
+        - input and output 載入電腦位置(有無i, 有無o)
 
 * Finish
     - argparser
