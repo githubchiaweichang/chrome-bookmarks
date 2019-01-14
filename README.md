@@ -3,9 +3,13 @@
 # Spec.
 * Not yet
     - 追加config，讓使用者可以在config設定書籤規則
-    - 設定一定刪除的url
+    - 刪除
+        - 設定一定刪除的url
+        - 重複連結
+        - 空白資料夾
 
 * Finish
+    - argparser
 
 
 
