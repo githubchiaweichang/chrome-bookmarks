@@ -1,1 +1,1 @@
-python bookmark.py EXPORT.html OUT.html
+python bookmark.py OLD.html NEW.html

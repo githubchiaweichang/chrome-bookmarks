@@ -1,6 +1,10 @@
 from bs4 import BeautifulSoup
 import sys
 import argparse
+import yaml
+
+
+import configparser
 
 
 def print_list_number(my_list):
@@ -63,238 +67,161 @@ def add_number(bookmarks):
             add_number(item["content"])
 
 
-# if len(sys.argv) == 3:
-#     input_filename = sys.argv[1]
-#     output_filename = sys.argv[2]
-# elif len(sys.argv) == 1:
-#     input_filename = 'Export.html'
-#     output_filename = 'Import.html'
-# else:
-#     raise AssertionError("Input parameters error, should be 'python bookmark.py Export.html Import.html' ")
+def main():
+    config = configparser.ConfigParser()
+    config.sections()
+    config.read('rule.ini')
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--infile', '-i', type=argparse.FileType('r', encoding='UTF-8'),
-                    default="OLD.html")
-parser.add_argument('--outfile', '-o', type=argparse.FileType('w', encoding='UTF-8'),
-                    default="NEW.html")
-
-infile = parser.parse_args().infile
-outfile = parser.parse_args().outfile
-
-
-html_doc = infile.read()
-
-
-soup = BeautifulSoup(html_doc, 'html5lib')
-data = str(soup.find("dl"))
-
-data = data.replace("<p>", "").replace("</p>", "")
-
-import xml.etree.ElementTree as ET
-root = ET.fromstring(data)
-
-
-bookmark_list = []
-
-for neighbor in root.iter('a'):
-    url_dict = {'url': neighbor.attrib['href']}
-    url_dict['title'] = neighbor.text
-    bookmark_list.append(url_dict)
-print_list_number(bookmark_list)
-
-
-output_bookmark = [
-    {
-        "type": "dir",
-        "title": "1-BASIC",
-        "content": [
-            {
-                "type": "dir",
-                "title": "1-HACKMD",
-                "content": [
-                ]
-
-            },
-        ]
-    },
-    {
-        "type": "dir",
-        "title": "2-TOOLS",
-        "content": [
-        ]
-    },
-    {
-        "type": "dir",
-        "title": "3-DATA",
-        "content": [
-            {
-                "type": "dir",
-                "title": "3-WIKI",
-                "content": [
-                ]
-
-            },
-            {
-                "type": "dir",
-                "title": "3-YOUTUBE",
-                "content": [
-                ]
-            },
-            {
-                "type": "dir",
-                "title": "3-GOOGLE",
-                "content": [
-                ]
-            },
-            {
-                "type": "dir",
-                "title": "3-BOOK",
-                "content": [
-                ]
-            },
-            {
-                "type": "dir",
-                "title": "3-REDMINE",
-                "content": [
-                ]
-            },
-            {
-                "type": "dir",
-                "title": "3-anime1",
-                "content": [
-                ]
-            }
-        ]
-    },
-
-
-    {
-        "type": "dir",
-        "title": "4-NEWS",
-        "content": [
-            {
-                "type": "dir",
-                "title": "4-NEWS_LIST",
-                "content": [
-                ]
-            }
-        ]
-    },
-    {
-        "type": "dir",
-        "title": "5-GRABEGE",
-        "content": [
-        ]
-    },
-    {
-        "type": "dir",
-        "title": "6-CODING",
-        "content": [
-        ]
-    },
-    {
-        "type": "dir",
-        "title": "7-BLOG",
-        "content": [
-        ]
-    },
-    {
-        "type": "dir",
-        "title": "8-language",
-        "content": [
-        ]
-    },
-]
-
-
-print_list_number(bookmark_list)
-while bookmark_list:
-    bookmark = bookmark_list.pop()
-    if 'hackmd' in str(bookmark["url"]):
-        add_to_dir("1-HACKMD", bookmark, output_bookmark)
-    elif '@1' in str(bookmark["title"]):
-        add_to_dir("1-BASIC", bookmark, output_bookmark)
-    elif '@2' in str(bookmark["title"]):
-        add_to_dir("2-TOOLS", bookmark, output_bookmark)
-    elif '@4' in str(bookmark["title"]):
-        add_to_dir("4-NEWS_LIST", bookmark, output_bookmark)
-    elif '@6' in str(bookmark["title"]):
-        add_to_dir("6-CODING", bookmark, output_bookmark)
-    elif '@7' in str(bookmark["title"]):
-        add_to_dir("7-BLOG", bookmark, output_bookmark)
-    elif '@8' in str(bookmark["title"]):
-        add_to_dir("8-language", bookmark, output_bookmark)
-    elif 'wikipedia' in str(bookmark["url"]):
-        add_to_dir("3-WIKI", bookmark, output_bookmark)
-    elif 'wikiwand' in str(bookmark["url"]):
-        add_to_dir("3-WIKI", bookmark, output_bookmark)
-    elif 'baike' in str(bookmark["url"]):
-        add_to_dir("3-WIKI", bookmark, output_bookmark)
-    elif 'wikiwand' in str(bookmark["url"]):
-        add_to_dir("3-WIKI", bookmark, output_bookmark)
-    elif 'mbalib' in str(bookmark["url"]):
-        add_to_dir("3-WIKI", bookmark, output_bookmark)
-    elif 'books' in str(bookmark["url"]):
-        add_to_dir("3-BOOK", bookmark, output_bookmark)
-    elif 'anime1' in str(bookmark["url"]):
-        add_to_dir("3-anime1", bookmark, output_bookmark)
-    elif 'myself-bbs.com' in str(bookmark["url"]):
-        add_to_dir("3-anime1", bookmark, output_bookmark)
-    elif 'youtube' in str(bookmark["url"]):
-        add_to_dir("3-YOUTUBE", bookmark, output_bookmark)
-    elif 'www.google.com.tw/search?' in str(bookmark["url"]):
-        add_to_dir("3-GOOGLE", bookmark, output_bookmark)
-    elif 'www.google.com/search?' in str(bookmark["url"]):
-        add_to_dir("3-GOOGLE", bookmark, output_bookmark)
-    elif 'redmine' in str(bookmark["url"]):
-        add_to_dir("3-REDMINE", bookmark, output_bookmark)
-    elif 'news' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'buzzorange' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'ruten' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'answers.yahoo' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'pchome' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'inside' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'ptt.cc' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'theinitium' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'mobile01' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'managertoday' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'mobile01' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'udn.com' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif 'hk01' in str(bookmark["url"]):
-        add_to_dir("4-NEWS", bookmark, output_bookmark)
-    elif '192.168' in str(bookmark["url"]):
-        pass
+    if len(sys.argv) == 3:
+        input_filename = sys.argv[1]
+        output_filename = sys.argv[2]
+    elif len(sys.argv) == 1:
+        input_filename = 'Export.html'
+        output_filename = 'Import.html'
     else:
-        add_to_dir("5-GRABEGE", bookmark, output_bookmark)
-print_list_number(bookmark_list)
+        raise AssertionError("Input parameters error, should be 'python bookmark.py Export.html Import.html' ")
+
+    # 確認輸入和輸出的位置
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--infile', '-i', type=argparse.FileType('r', encoding='UTF-8'),
+                        default="OLD.html")
+    parser.add_argument('--outfile', '-o', type=argparse.FileType('w', encoding='UTF-8'),
+                        default="NEW.html")
+
+    infile = parser.parse_args().infile
+    outfile = parser.parse_args().outfile
+
+    # 讀取輸入的書籤，並解析
+
+    html_doc = infile.read()
+
+    soup = BeautifulSoup(html_doc, 'html5lib')
+    data = str(soup.find("dl"))
+
+    data = data.replace("<p>", "").replace("</p>", "")
+
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(data)
+
+    bookmark_list = []
+
+    # 將書籤拆成一大包
+
+    for neighbor in root.iter('a'):
+        url_dict = {'url': neighbor.attrib['href']}
+        url_dict['title'] = neighbor.text
+        bookmark_list.append(url_dict)
+    print_list_number(bookmark_list)
+
+    # 輸出資料夾格式調整
+
+    input_dir = yaml.load(open('dir.yaml'))
+
+    def yaml_to_dir(yaml_data):
+        dst_list = []
+        for yaml_title in yaml_data:
+            dst_dir = {}
+            dst_dir["type"] = "dir"
+            dst_dir["title"] = yaml_title
+            dst_dir["content"] = yaml_to_dir(yaml_data[yaml_title]) if isinstance(yaml_data[yaml_title], dict) else []
+            print(dst_dir["content"])
+            dst_list.append(dst_dir)
+
+        return dst_list
+
+    output_bookmark = yaml_to_dir(input_dir)
+    print(output_bookmark)
+
+    print_list_number(bookmark_list)
+    while bookmark_list:
+        bookmark = bookmark_list.pop()
+        if 'hackmd' in str(bookmark["url"]):
+            add_to_dir("1-HACKMD", bookmark, output_bookmark)
+        elif '@1' in str(bookmark["title"]):
+            add_to_dir("1-BASIC", bookmark, output_bookmark)
+        elif '@2' in str(bookmark["title"]):
+            add_to_dir("2-TOOLS", bookmark, output_bookmark)
+        elif '@4' in str(bookmark["title"]):
+            add_to_dir("4-NEWS_LIST", bookmark, output_bookmark)
+        elif '@6' in str(bookmark["title"]):
+            add_to_dir("6-CODING", bookmark, output_bookmark)
+        elif '@7' in str(bookmark["title"]):
+            add_to_dir("7-BLOG", bookmark, output_bookmark)
+        elif '@8' in str(bookmark["title"]):
+            add_to_dir("8-language", bookmark, output_bookmark)
+        elif 'wikipedia' in str(bookmark["url"]):
+            add_to_dir("3-WIKI", bookmark, output_bookmark)
+        elif 'wikiwand' in str(bookmark["url"]):
+            add_to_dir("3-WIKI", bookmark, output_bookmark)
+        elif 'baike' in str(bookmark["url"]):
+            add_to_dir("3-WIKI", bookmark, output_bookmark)
+        elif 'wikiwand' in str(bookmark["url"]):
+            add_to_dir("3-WIKI", bookmark, output_bookmark)
+        elif 'mbalib' in str(bookmark["url"]):
+            add_to_dir("3-WIKI", bookmark, output_bookmark)
+        elif 'books' in str(bookmark["url"]):
+            add_to_dir("3-BOOK", bookmark, output_bookmark)
+        elif 'anime1' in str(bookmark["url"]):
+            add_to_dir("3-anime1", bookmark, output_bookmark)
+        elif 'myself-bbs.com' in str(bookmark["url"]):
+            add_to_dir("3-anime1", bookmark, output_bookmark)
+        elif 'youtube' in str(bookmark["url"]):
+            add_to_dir("3-YOUTUBE", bookmark, output_bookmark)
+        elif 'www.google.com.tw/search?' in str(bookmark["url"]):
+            add_to_dir("3-GOOGLE", bookmark, output_bookmark)
+        elif 'www.google.com/search?' in str(bookmark["url"]):
+            add_to_dir("3-GOOGLE", bookmark, output_bookmark)
+        elif 'redmine' in str(bookmark["url"]):
+            add_to_dir("3-REDMINE", bookmark, output_bookmark)
+        elif 'news' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'buzzorange' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'ruten' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'answers.yahoo' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'pchome' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'inside' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'ptt.cc' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'theinitium' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'mobile01' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'managertoday' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'mobile01' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'udn.com' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif 'hk01' in str(bookmark["url"]):
+            add_to_dir("4-NEWS", bookmark, output_bookmark)
+        elif '192.168' in str(bookmark["url"]):
+            pass
+        else:
+            add_to_dir("5-GRABEGE", bookmark, output_bookmark)
+    print_list_number(bookmark_list)
+
+    add_number(output_bookmark)
+
+    out = '<!DOCTYPE NETSCAPE-Bookmark-file-1> \n \
+    <!-- This is an automatically generated file.\n \
+        It will be read and overwritten.\n \
+        DO NOT EDIT! -->\n \
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">\n \
+    <TITLE>Bookmarks</TITLE>\n \
+    <H1>Bookmarks</H1>'
+
+    out += '<DL><DT><H3 PERSONAL_TOOLBAR_FOLDER="true">bookmark</H3>'
+    out += dict_to_xml(output_bookmark)
+    out += '</DL>'
+
+    outfile.write(out)
 
 
-add_number(output_bookmark)
-
-
-out = '<!DOCTYPE NETSCAPE-Bookmark-file-1> \n \
-<!-- This is an automatically generated file.\n \
-    It will be read and overwritten.\n \
-    DO NOT EDIT! -->\n \
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">\n \
-<TITLE>Bookmarks</TITLE>\n \
-<H1>Bookmarks</H1>'
-
-
-out += '<DL><DT><H3 PERSONAL_TOOLBAR_FOLDER="true">bookmark</H3>'
-out += dict_to_xml(output_bookmark)
-out += '</DL>'
-
-outfile.write(out)
+if __name__ == '__main__':
+    main()
