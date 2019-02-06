@@ -1,1 +1,1 @@
-python bookmark.py OLD.html NEW.html
+python bookmark.py -i OLD.html -o NEW.html
